@@ -18,8 +18,9 @@ arr = X.toarray()
 similarity_table = pd.DataFrame(cosine_similarity(arr), columns=cocktail_df['drink'], index=cocktail_df['drink'])
 for column in similarity_table.columns:
     similarity_table[column] = np.where(similarity_table[column] >= 1, 0, similarity_table[column])
-similar_cocktail= similarity_table.idxmax()
-
+    similar_cocktail_name= similarity_table.idxmax()
+    # similar_cocktail_ingredients= cocktail_df[cocktail_df.drink == similar_cocktail_name].ingredients
+    
 
 @app.route('/')
 def home():
@@ -27,11 +28,15 @@ def home():
 
 @app.route('/predict_api',methods=['POST'])
 def predict_api():
+    output = {}
+
     data=request.json['data']
     print(data)
     # print(list(data.values()))
     ## print(np.array(list(data.values())).reshape(1,-1))
-    output=similar_cocktail[data['drink']]
+    output['drink']=similar_cocktail_name[data['drink']]
+    output['ingredients']= str(cocktail_df[cocktail_df.drink ==  output['drink']].ingredients.values[0])
+    print(output)
     return jsonify(output)
 
 

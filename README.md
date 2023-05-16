@@ -11,5 +11,8 @@
 Create a new environment
 ```
 conda create -p venv python==3.7 -y
-
 ```
+
+### Description
+
+Give the name of a cocktail and the app will recommend a similar cocktail (name and ingredients).
