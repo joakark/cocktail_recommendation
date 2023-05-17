@@ -39,6 +39,16 @@ def predict_api():
     print(output)
     return jsonify(output)
 
+@app.route('/predict',methods=['POST'])
+def predict():
+    output = {}
+
+    data=[str(x) for x in request.form.values()]
+    print(data)
+    output['drink']=similar_cocktail_name[data[0]]
+    output['ingredients']= str(cocktail_df[cocktail_df.drink == output['drink']].ingredients.values[0])
+    return render_template("home.html",prediction_text="The recommended cocktail is {} and the ingredients are {}.".format(output['drink'],output['ingredients']))
+
 
 if __name__=="__main__":
     app.run(debug=True)
