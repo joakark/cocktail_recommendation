@@ -1,18 +1,8 @@
 ### Cocktail Recommendation
 
-### Software and Tools Requirements
+In this analysis, I am:
 
-1. [GithubAccount](https://github.com)
-2. [VSCodeIDE](https://code.visualstudio.com)
-3. [HerokuAccount](https://heroku.com)
-4. [GitCLI](https://git-scm.com/book/en/v2/Getting-Started-The-Command-Line)
+a) Scraping cocktail information from the web, and
+b) Creating a simple algorithm that finds cocktails that are similar to each other based on their ingredients. 
 
-
-Create a new environment
-```
-conda create -p venv python==3.7 -y
-```
-
-### Description
-
-Give the name of a cocktail and the app will recommend a similar cocktail (name and ingredients).
+The end goal is to create a cocktail recommendation engine.
