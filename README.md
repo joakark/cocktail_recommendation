@@ -1,10 +1,10 @@
 ### Cocktail Recommendation
 
-In this analysis, I am:
+In this analysis, I:
 
-* Scraping cocktail information from the web, and
-* Creating a simple algorithm that finds cocktails that are similar to each other based on their ingredients. 
+* Scrape cocktail information from the web (cocktaildb API)
+* Develop a simple NLP algorithm that finds cocktails that are similar to each other based on their ingredients
+* Create a web application using the streamlit package on which users can pick a cocktail that they like and a similar cocktail will be recommended to them.
 
-The main code is located in the **cocktail_scraping_and_recommendation.ipynb** notebook.
-
-The end goal is to create a cocktail recommendation engine.
+The file **scrape.py** includes the code for scraping and the NLP model.
+In the files **app.py** and **recommend_page.py** the streamlit application is being developed. 
