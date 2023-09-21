@@ -46,12 +46,26 @@ def scrape_cocktail_list():
 
 cocktail_list = scrape_cocktail_list()
 
+# create columns that show ingredients and their quantity
 
-def get_ingredients(cocktail_dict):
+for i in range(len(cocktail_list)):
+    try:
+        for j in range(len(cocktail_list[i]['drinks'])):
+            for k in range(1,16):
+                if cocktail_list[i]['drinks'][j]['strIngredient'+str(k)] is not None:
+                    cocktail_list[i]['drinks'][j]['ingredient_and_quantity'+str(k)] = cocktail_list[i]['drinks'][j]['strIngredient'+str(k)] + " - " + cocktail_list[i]['drinks'][j]['strMeasure'+str(k)]
+                else:
+                    cocktail_list[i]['drinks'][j]['ingredient_and_quantity'+str(k)] = None
+    except:
+        pass
+
+
+
+def get_ingredients(cocktail_dict, col_name):
 
   # pulls the ingredients of each cocktail (that are stored in 'strIngredient1', 'strIngredient2' etc) in one string
 
-    ingredient = cocktail_dict['strIngredient1']
+    ingredient = cocktail_dict[col_name + '1']
     i = 2
 
     ingredient_list = ""
@@ -59,7 +73,7 @@ def get_ingredients(cocktail_dict):
     while ingredient:
 
         ingredient_list = ingredient + ", " + ingredient_list
-        ingredient = cocktail_dict['strIngredient'+str(i)]
+        ingredient = cocktail_dict[col_name + str(i)]
 
         i = i+1
 
@@ -77,7 +91,8 @@ def cocktail_data_clean(cocktail_list):
             for j in range(len(cocktail_list[i]['drinks'])):
                 cocktail = {}
                 cocktail['drink'] = cocktail_list[i]['drinks'][j]['strDrink']
-                cocktail['ingredients'] = get_ingredients(cocktail_list[i]['drinks'][j])
+                cocktail['ingredients'] = get_ingredients(cocktail_list[i]['drinks'][j],'strIngredient')
+                cocktail['ingredients_and_quantities'] = get_ingredients(cocktail_list[i]['drinks'][j],'ingredient_and_quantity')
                 cocktail['instructions'] = cocktail_list[i]['drinks'][j]['strInstructions']
 
                 cocktails_info.append(cocktail)
@@ -94,18 +109,17 @@ cocktails_info = cocktail_data_clean(cocktail_list)
 # #### Step 2: Find cocktail similarity using Tf-idf vectorizer and cosine similarity of the ingredients
 
 cocktail_df = pd.DataFrame(cocktails_info)
+cocktail_df.drop_duplicates(inplace=True)
 
 
 def similar_cocktail(cocktail_df, chosen_cocktail):
 
     # string pre-processing
-    cocktail_df['drink'] = cocktail_df['drink'].str.lower().str.replace('[^\w\s]','')
-    cocktail_df['ingredients'] = cocktail_df['ingredients'].str.lower().str.replace('[^\w\s]','')
-    cocktail_df['instructions'] = cocktail_df['instructions'].str.lower().str.replace('[^\w\s]','')
+    cocktail_df['ingredients_processed'] = cocktail_df['ingredients'].str.lower().str.replace('[^\w\s]','')
 
     # implement tf-idf vectorizer
     vectorizer = TfidfVectorizer()
-    X = vectorizer.fit_transform(cocktail_df['ingredients'])
+    X = vectorizer.fit_transform(cocktail_df['ingredients_processed'])
     arr = X.toarray()
 
     similarity_table = pd.DataFrame(cosine_similarity(arr), columns=cocktail_df['drink'], index=cocktail_df['drink'])
@@ -115,9 +129,6 @@ def similar_cocktail(cocktail_df, chosen_cocktail):
         
     similar_cocktail= similarity_table.idxmax()
     
-    try:
-        new_cocktail = similar_cocktail[chosen_cocktail][0]
-    except:
-        new_cocktail = similar_cocktail[chosen_cocktail].unique()[0]
+    new_cocktail = similar_cocktail[chosen_cocktail]
 
     return new_cocktail
