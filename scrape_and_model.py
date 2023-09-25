@@ -53,7 +53,10 @@ for i in range(len(cocktail_list)):
         for j in range(len(cocktail_list[i]['drinks'])):
             for k in range(1,16):
                 if cocktail_list[i]['drinks'][j]['strIngredient'+str(k)] is not None:
-                    cocktail_list[i]['drinks'][j]['ingredient_and_quantity'+str(k)] = cocktail_list[i]['drinks'][j]['strIngredient'+str(k)] + " - " + cocktail_list[i]['drinks'][j]['strMeasure'+str(k)]
+                    try:
+                        cocktail_list[i]['drinks'][j]['ingredient_and_quantity'+str(k)] = cocktail_list[i]['drinks'][j]['strIngredient'+str(k)] + " - " + cocktail_list[i]['drinks'][j]['strMeasure'+str(k)]
+                    except:
+                        cocktail_list[i]['drinks'][j]['ingredient_and_quantity'+str(k)] = cocktail_list[i]['drinks'][j]['strIngredient'+str(k)] 
                 else:
                     cocktail_list[i]['drinks'][j]['ingredient_and_quantity'+str(k)] = None
     except:
