@@ -2,17 +2,11 @@
 
 import pandas as pd
 import numpy as np
-
 import requests
 import string
-import warnings
-
-warnings.filterwarnings("ignore")
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-import matplotlib.pyplot as plt
 
 def get_url_list():
 
