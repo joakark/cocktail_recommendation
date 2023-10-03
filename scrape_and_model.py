@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 
 import requests
-from requests.auth import HTTPBasicAuth
 import string
 import warnings
 
